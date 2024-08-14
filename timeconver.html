@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地区时间转换</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0fff0; /* 浅绿色背景 */
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        select, input {
+            font-size: 14px;
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            font-size: 14px;
+            padding: 10px 20px;
+            background-color: #008000; /* 绿色按钮 */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #006400; /* 深绿色按钮 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="local-time"></h1>
+        <select id="timezone-select"></select>
+        <button onclick="convertTime()">转换时间</button>
+        <h2 id="converted-time"></h2>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
+    <script>
+        function updateLocalTime() {
+            const now = new Date();
+            document.getElementById('local-time').innerText = `当地时间: ${now.toLocaleString()}`;
+        }
+
+        function populateTimezones() {
+            const timezoneSelect = document.getElementById('timezone-select');
+            moment.tz.names().forEach(timezone => {
+                const option = document.createElement('option');
+                option.value = timezone;
+                option.text = timezone;
+                timezoneSelect.appendChild(option);
+            });
+        }
+
+        function convertTime() {
+            const timezone = document.getElementById('timezone-select').value;
+            if (timezone) {
+                const convertedTime = moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                document.getElementById('converted-time').innerText = `转换时间: ${convertedTime}`;
+            } else {
+                alert('请选择有效的时区');
+            }
+        }
+
+        // 每秒更新一次当地时间
+        setInterval(updateLocalTime, 1000);
+        updateLocalTime();
+        populateTimezones();
+    </script>
+</body>
+</html>
